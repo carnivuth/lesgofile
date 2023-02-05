@@ -11,7 +11,7 @@ const SETTINGS_FILE = "settings.conf"
 
 var SETTINGS map[string]string = make(map[string]string)
 
-func getSettings() {
+func loadSettings() {
 
 	readFile, err := os.Open(SETTINGS_FILE)
 
