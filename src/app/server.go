@@ -26,5 +26,8 @@ func server(port string) {
 
 }
 func saveFile(conn *net.Conn) {
+	fmt.Println("connected to client")
+
+	///create protocol for transfer file over server
 
 }
