@@ -1,4 +1,7 @@
 #!/bin/bash
+
+[ "$#" -ne 3 ] && echo "parameters required GOOS GOARCH FILENAME" && exit
+
 mkdir build >/dev/null 2>/dev/null
 cp settings.conf build/settings.conf
-go build -o build/lesgofile.o
+env GOOS="$1" GOARCH="$2" go build -o build/"$3"
