@@ -18,13 +18,12 @@ func main() {
 		return
 	}
 	args := os.Args[1:]
-	fmt.Println(args[0])
 	if args[0] == "send" {
 
 		//check parameters and launch client
 		if checkParameters(args[1]) {
 
-			network.Sender(args[1], settings.SETTINGS["port"])
+			network.Sender(args[1], settings.SETTINGS["PORT"], args[2])
 
 		} else {
 
@@ -35,7 +34,7 @@ func main() {
 	} else if args[0] == "recive" {
 
 		//launch server
-		network.Reciver(settings.SETTINGS["port"], terminate)
+		network.Reciver(settings.SETTINGS["PORT"], terminate)
 
 	}
 }
