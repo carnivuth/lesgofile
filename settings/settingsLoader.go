@@ -18,7 +18,7 @@ func LoadSettings() {
 	}
 	exPath := filepath.Dir(ex)
 
-	readFile, err := os.Open(exPath + SETTINGS_FILE)
+	readFile, err := os.Open(exPath + string(os.PathSeparator) + SETTINGS_FILE)
 
 	if err != nil {
 		panic(err)
