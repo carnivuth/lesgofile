@@ -1,3 +1,3 @@
-PORT:50000
-DIM_BUFFER:1024
-DESTINATION_FOLDER:[destination folder path with ending /]
+PORT=50000
+DIM_BUFFER=1024
+DESTINATION_FOLDER=[destination folder path with ending /]
