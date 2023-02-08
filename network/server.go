@@ -17,7 +17,7 @@ func Reciver(port string, terminate chan int) {
 
 	ln, err := net.Listen("tcp", ":"+port)
 	if err != nil {
-		fmt.Println("unable to listen over port: " + port)
+		panic("unable to listen over port: " + port)
 	}
 	//loop
 	fmt.Println("start listen on port: " + port)
@@ -29,7 +29,7 @@ func Reciver(port string, terminate chan int) {
 			//handle connection with go routine
 			go saveFile(conn, terminate)
 			<-terminate
-			fmt.Println("connection terminated ")
+
 		}
 	}
 
@@ -61,11 +61,10 @@ func saveFile(conn net.Conn, terminate chan int) {
 	//write file
 	for err != io.EOF {
 		n_read, err = conn.Read(buffer)
-		//fmt.Printf("recived %d byte\n", n_read)
 		file.Write(buffer[:n_read])
 	}
 	file.Close()
-
+	fmt.Println("connection terminated ")
 	terminate <- 1
 
 }
