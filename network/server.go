@@ -53,7 +53,7 @@ func saveFile(conn net.Conn, terminate chan int) {
 	fmt.Printf("recived %s filename\n", string(filename[:n_read]))
 
 	//create file
-	file, err := os.Create(string(filename[:n_read]))
+	file, err := os.Create(settings.SETTINGS["DESTINATION_FOLDER"] + string(filename[:n_read]))
 	if err != nil {
 		fmt.Println(err)
 		return
