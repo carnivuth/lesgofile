@@ -3,4 +3,4 @@
 
 ./build.sh "$@"
 mkdir deploy >/dev/null 2>/dev/null
-tar -cf deploy/deploy-lesgofile-"$(date -I)"-"$1"-"$2".tar build/"$3" build/settings.conf 
+tar -czf deploy/deploy-lesgofile-"$(date -I)"-"$1"-"$2".tar.gz build/"$3" build/settings.json 
