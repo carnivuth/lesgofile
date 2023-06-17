@@ -26,14 +26,6 @@ func LoadSettings() {
 	byteResult, _ := ioutil.ReadAll(readFile)
 	json.Unmarshal([]byte(byteResult), &SETTINGS)
 
-	/*fileScanner := bufio.NewScanner(readFile)
-
-	fileScanner.Split(bufio.ScanLines)
-	//load settings
-	for fileScanner.Scan() {
-		setting := strings.Split(fileScanner.Text(), "=")
-		SETTINGS[setting[0]] = setting[1]
-	}*/
 	//close file
 	readFile.Close()
 }
