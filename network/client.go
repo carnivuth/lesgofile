@@ -9,22 +9,41 @@ import (
 	"path/filepath"
 	"strconv"
 
+	"github.com/carnivuth/lesgofile/logger"
 	"github.com/carnivuth/lesgofile/settings"
 )
 
 // connect to server and upload file
 func Sender(address string, port string, name string) {
 
-	dim, err := strconv.Atoi(settings.SETTINGS["DIM_BUFFER"])
-	buffer := make([]byte, dim)
 	//connect to server
 	conn, err := net.Dial("tcp", address+":"+port)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println("connection succesful to host: " + address)
+	logger.Emit(logger.Log, "connection succesful to host: "+address)
 	//open file
+
+	info, err := os.Stat(name)
+	if err != nil {
+		logger.Emit(logger.Log, name+" is not a correct path ")
+		return
+	}
+
+	if info.IsDir() {
+		logger.Emit(logger.Log, name+" is a directory ")
+		//TODO directory support
+	} else {
+		logger.Emit(logger.Log, "sending "+name)
+		sendfile(name, conn)
+	}
+
+	conn.Close()
+}
+func sendfile(name string, conn net.Conn) {
+	dim, err := strconv.Atoi(settings.SETTINGS["DIM_BUFFER"])
+	buffer := make([]byte, dim)
 	file, err := os.Open(name)
 	if err != nil {
 		fmt.Println(err)
@@ -48,5 +67,5 @@ func Sender(address string, port string, name string) {
 
 	}
 	file.Close()
-	conn.Close()
+
 }
