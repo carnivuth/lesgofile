@@ -8,6 +8,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/carnivuth/lesgofile/logger"
 	"github.com/carnivuth/lesgofile/settings"
 )
 
@@ -20,11 +21,11 @@ func Reciver(port string) {
 		panic("unable to listen over port: " + port)
 	}
 	//loop
-	fmt.Println("start listen on port: " + port)
+	logger.Emit(logger.Log, "start listen on port: "+port)
 	for {
 		conn, err := ln.Accept()
 		if err != nil {
-			fmt.Println("unable to accept request from client")
+			logger.Emit(logger.Log, "unable to accept request from client")
 		} else {
 			//handle connection with go routine
 			go saveFile(conn)
@@ -39,7 +40,7 @@ func saveFile(conn net.Conn) {
 	dim, err := strconv.Atoi(settings.SETTINGS["DIM_BUFFER"])
 	buffer := make([]byte, dim)
 	filename := make([]byte, dim)
-	fmt.Println("connected to client")
+	logger.Emit(logger.Log, "connected to client")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -49,7 +50,7 @@ func saveFile(conn net.Conn) {
 
 	//read filename
 	n_read, err = conn.Read(filename[:size])
-	fmt.Printf("recived %s filename\n", string(filename[:n_read]))
+	logger.Emit(logger.Log, "recived "+string(filename[:n_read])+" filename\n")
 
 	//create file
 	file, err := os.Create(settings.SETTINGS["DESTINATION_FOLDER"] + string(filename[:n_read]))
@@ -63,6 +64,6 @@ func saveFile(conn net.Conn) {
 		file.Write(buffer[:n_read])
 	}
 	file.Close()
-	fmt.Println("connection terminated ")
+	logger.Emit(logger.Log, "connection terminated ")
 
 }
