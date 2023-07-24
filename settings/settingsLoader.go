@@ -36,6 +36,6 @@ func setDefaults() {
 
 	SETTINGS["PORT"] = "50000"
 	SETTINGS["DIM_BUFFER"] = "1024"
-	SETTINGS["DESTINATION_FOLDER"] = "./"
+	SETTINGS["DESTINATION_FOLDER"] = "." + string(os.PathSeparator)
 
 }
