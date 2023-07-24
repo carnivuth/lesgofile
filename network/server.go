@@ -8,39 +8,39 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/carnivuth/lesgofile/logger"
 	"github.com/carnivuth/lesgofile/settings"
 )
 
 //wait for client and download file
 
-func Reciver(port string, terminate chan int) {
+func Reciver(port string) {
 
 	ln, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		panic("unable to listen over port: " + port)
 	}
 	//loop
-	fmt.Println("start listen on port: " + port)
+	logger.Emit(logger.Log, "start listen on port: "+port)
 	for {
 		conn, err := ln.Accept()
 		if err != nil {
-			fmt.Println("unable to accept request from client")
+			logger.Emit(logger.Log, "unable to accept request from client")
 		} else {
 			//handle connection with go routine
-			go saveFile(conn, terminate)
-			<-terminate
+			go saveFile(conn)
 
 		}
 	}
 
 }
-func saveFile(conn net.Conn, terminate chan int) {
+func saveFile(conn net.Conn) {
 	var size int64
 	var n_read int
 	dim, err := strconv.Atoi(settings.SETTINGS["DIM_BUFFER"])
 	buffer := make([]byte, dim)
 	filename := make([]byte, dim)
-	fmt.Println("connected to client")
+	logger.Emit(logger.Log, "connected to client")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -50,7 +50,7 @@ func saveFile(conn net.Conn, terminate chan int) {
 
 	//read filename
 	n_read, err = conn.Read(filename[:size])
-	fmt.Printf("recived %s filename\n", string(filename[:n_read]))
+	logger.Emit(logger.Log, "recived "+string(filename[:n_read])+" filename\n")
 
 	//create file
 	file, err := os.Create(settings.SETTINGS["DESTINATION_FOLDER"] + string(filename[:n_read]))
@@ -64,7 +64,6 @@ func saveFile(conn net.Conn, terminate chan int) {
 		file.Write(buffer[:n_read])
 	}
 	file.Close()
-	fmt.Println("connection terminated ")
-	terminate <- 1
+	logger.Emit(logger.Log, "connection terminated ")
 
 }
