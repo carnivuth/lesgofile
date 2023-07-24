@@ -21,11 +21,21 @@ func LoadSettings() {
 	readFile, err := os.Open(exPath + string(os.PathSeparator) + SETTINGS_FILE)
 
 	if err != nil {
-		panic(err)
+		setDefaults()
+	} else {
+		byteResult, _ := ioutil.ReadAll(readFile)
+		json.Unmarshal([]byte(byteResult), &SETTINGS)
+
 	}
-	byteResult, _ := ioutil.ReadAll(readFile)
-	json.Unmarshal([]byte(byteResult), &SETTINGS)
 
 	//close file
 	readFile.Close()
+}
+
+func setDefaults() {
+
+	SETTINGS["PORT"] = "50000"
+	SETTINGS["DIM_BUFFER"] = "1024"
+	SETTINGS["DESTINATION_FOLDER"] = "./"
+
 }
