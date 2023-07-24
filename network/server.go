@@ -13,7 +13,7 @@ import (
 
 //wait for client and download file
 
-func Reciver(port string, terminate chan int) {
+func Reciver(port string) {
 
 	ln, err := net.Listen("tcp", ":"+port)
 	if err != nil {
@@ -27,14 +27,13 @@ func Reciver(port string, terminate chan int) {
 			fmt.Println("unable to accept request from client")
 		} else {
 			//handle connection with go routine
-			go saveFile(conn, terminate)
-			<-terminate
+			go saveFile(conn)
 
 		}
 	}
 
 }
-func saveFile(conn net.Conn, terminate chan int) {
+func saveFile(conn net.Conn) {
 	var size int64
 	var n_read int
 	dim, err := strconv.Atoi(settings.SETTINGS["DIM_BUFFER"])
@@ -65,6 +64,5 @@ func saveFile(conn net.Conn, terminate chan int) {
 	}
 	file.Close()
 	fmt.Println("connection terminated ")
-	terminate <- 1
 
 }
