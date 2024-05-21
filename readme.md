@@ -1,18 +1,28 @@
 # LESGOFILE
  
-just a simple project to transfer file over network 
+Simple project to transfer file over network 
 
-## installation guide:
-- from source code
-    - install go compiler
-    - clone repo
-    - launch `deploy.sh GOOS GOARCH filename` 
-    - extract the .tar.gz file
-    - set correct variables in `settings.json` file
-    - enjoy :)
+The goal of the project is to have a simple daemon application to experiment deployment and distribution techniques
 
-## parameters
- - run client:
+## INSTALLATION:
+
+### FROM SOURCE
+
+- install the make dependencies `go`
+
+- clone repo
+
+- run `sudo make install`
+
+you can set `DESTDIR` and `prefix` variables in make to customize the installation directory
+
+## USAGE
+
+the main binary file can act as server and client, 
+
+ - to run client:
+
  `lesgofile send "ip address" filename`
-- run server:
+
+- to run server:
  `lesgofile recive`
