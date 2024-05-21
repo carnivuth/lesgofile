@@ -11,6 +11,7 @@ install: build
 	cp settings.example.json $(DESTDIR)$(prefix)/bin/settings.json
 
 uninstall:
+	mkdir -p $(DESTDIR)$(prefix)/bin
 	-rm -f $(DESTDIR)$(prefix)/bin/lesgofile
 	-rm -f $(DESTDIR)$(prefix)/bin/settings.json
 
