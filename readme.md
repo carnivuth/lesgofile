@@ -39,3 +39,8 @@ to run server:
 ```bash
 lesgofile recive
 ```
+or with systemd 
+
+```
+systemctl start lesgofile
+```
