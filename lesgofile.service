@@ -1,0 +1,13 @@
+
+[Unit]
+Description= Lesgofile daemon service
+Wants=network.service
+After=network.service
+After=network.target
+
+[Service]
+ExecStart=[[BIN_PATH]]/bin/lesgofile recive
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
