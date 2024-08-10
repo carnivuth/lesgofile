@@ -55,8 +55,7 @@ func saveFile(conn net.Conn) {
 	//create file
 	file, err := os.Create(settings.SETTINGS["DESTINATION_FOLDER"] + string(filename[:n_read]))
 	if err != nil {
-		fmt.Println(err)
-		return
+		panic(err)
 	}
 	//write file
 	for err != io.EOF {

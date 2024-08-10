@@ -6,7 +6,8 @@ After=network.service
 After=network.target
 
 [Service]
-ExecStart=[[BIN_PATH]]/bin/lesgofile recive
+ExecStart=/usr/bin/lesgofile serve
+User=lesgofile
 Restart=always
 
 [Install]

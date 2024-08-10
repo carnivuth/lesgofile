@@ -11,11 +11,11 @@ import (
 
 // /check parameters and launch slaves
 
-const PARAMETERS = "PARAMETERS \nfunctionmode = [send|recive] \nSEND PARAMETERS \nserveraddress filename"
+const PARAMETERS = "PARAMETERS \nfunctionmode = [send|serve] \nSEND PARAMETERS \nserveraddress filename"
 
 // PARAMETERS
 
-// functionmode = [send|recive]
+// functionmode = [send|serve]
 // SEND PARAMETERS
 //
 //	serveraddress filename
@@ -33,7 +33,7 @@ func main() {
 	if len(args) < 1 {
 		logger.Emit(logger.Log, "too fiew arguments ")
 		logger.Emit(logger.Log, PARAMETERS)
-		return
+		os.Exit(1)
 	}
 	if args[0] == "send" {
 		if len(args) == 3 {
@@ -48,7 +48,7 @@ func main() {
 
 		}
 
-	} else if args[0] == "recive" {
+	} else if args[0] == "serve" {
 
 		//launch server
 		network.Reciver(settings.SETTINGS["PORT"])
