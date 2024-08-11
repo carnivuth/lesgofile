@@ -3,3 +3,4 @@ deploy
 settings.conf
 test
 .obsidian
+dist/

@@ -2,40 +2,31 @@ package settings
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"os"
-	"path/filepath"
+	"log"
 )
 
-const SETTINGS_FILE = "settings.json"
+const SETTINGS_FILE = "/etc/lesgofile/lesgofile.json"
 
 var SETTINGS map[string]string = make(map[string]string)
 
-func LoadSettings() {
-	ex, err := os.Executable()
-	if err != nil {
-		panic(err)
-	}
-	exPath := filepath.Dir(ex)
-
-	readFile, err := os.Open(exPath + string(os.PathSeparator) + SETTINGS_FILE)
-
-	if err != nil {
-		setDefaults()
-	} else {
-		byteResult, _ := ioutil.ReadAll(readFile)
-		json.Unmarshal([]byte(byteResult), &SETTINGS)
-
-	}
-
-	//close file
-	readFile.Close()
-}
-
 func setDefaults() {
-
 	SETTINGS["PORT"] = "50000"
 	SETTINGS["DIM_BUFFER"] = "1024"
 	SETTINGS["DESTINATION_FOLDER"] = "." + string(os.PathSeparator)
+}
 
+// set default settings and try to read config file
+func LoadSettings() {
+	setDefaults()
+	readFile, err := os.Open(SETTINGS_FILE)
+	defer readFile.Close()
+	if err == nil {
+		byteResult, _ := io.ReadAll(readFile)
+		json.Unmarshal([]byte(byteResult), &SETTINGS)
+		log.Printf("settings loaded from %s",SETTINGS_FILE)
+	}else{
+		log.Print("settings file not readed")
+	}
 }
