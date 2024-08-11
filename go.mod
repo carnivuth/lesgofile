@@ -1,3 +1,3 @@
-module github.com/carnivuth/lesgofile
+module lesgofile
 
 go 1.19

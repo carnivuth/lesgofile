@@ -3,37 +3,20 @@ package main
 import (
 	"bufio"
 	"os"
-
-	"github.com/carnivuth/lesgofile/logger"
-	"github.com/carnivuth/lesgofile/network"
-	"github.com/carnivuth/lesgofile/settings"
+	"log"
+	"lesgofile/network"
+	"lesgofile/settings"
 )
-
-// /check parameters and launch slaves
 
 const PARAMETERS = "PARAMETERS \nfunctionmode = [send|serve] \nSEND PARAMETERS \nserveraddress filename"
 
-// PARAMETERS
-
-// functionmode = [send|serve]
-// SEND PARAMETERS
-//
-//	serveraddress filename
-func printToStdOut(message string) {
-	println(message)
-}
-
 func main() {
-	logger.AddListener(logger.Log, printToStdOut)
 	settings.LoadSettings()
 
-	logger.Emit(logger.Log, "settings loaded")
 
 	var args = os.Args[1:]
 	if len(args) < 1 {
-		logger.Emit(logger.Log, "too fiew arguments ")
-		logger.Emit(logger.Log, PARAMETERS)
-		os.Exit(1)
+		log.Fatal( "too fiew arguments ",PARAMETERS)
 	}
 	if args[0] == "send" {
 		if len(args) == 3 {

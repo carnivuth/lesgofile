@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+	"log"
 )
 
 const SETTINGS_FILE = "/etc/lesgofile/lesgofile.json"
@@ -16,13 +17,16 @@ func setDefaults() {
 	SETTINGS["DESTINATION_FOLDER"] = "." + string(os.PathSeparator)
 }
 
+// set default settings and try to read config file
 func LoadSettings() {
-	// set default settings and try to read config file
 	setDefaults()
 	readFile, err := os.Open(SETTINGS_FILE)
 	defer readFile.Close()
 	if err == nil {
 		byteResult, _ := io.ReadAll(readFile)
 		json.Unmarshal([]byte(byteResult), &SETTINGS)
+		log.Printf("settings loaded from %s",SETTINGS_FILE)
+	}else{
+		log.Print("settings file not readed")
 	}
 }

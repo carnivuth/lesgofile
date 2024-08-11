@@ -2,15 +2,13 @@ package network
 
 import (
 	"encoding/binary"
-	"fmt"
 	"io"
 	"net"
 	"os"
+	"log"
 	"path/filepath"
 	"strconv"
-
-	"github.com/carnivuth/lesgofile/logger"
-	"github.com/carnivuth/lesgofile/settings"
+	"lesgofile/settings"
 )
 
 // connect to server and upload file
@@ -19,36 +17,36 @@ func Sender(address string, port string, name string) {
 	//connect to server
 	conn, err := net.Dial("tcp", address+":"+port)
 	if err != nil {
-		fmt.Println(err)
-		return
+		log.Panicf("could not connect to host %s:%s",address,port)
 	}
-	logger.Emit(logger.Log, "connection succesful to host: "+address)
-	//open file
+	log.Printf( "connection succesful to host: %s",address)
 
+	//open file
 	info, err := os.Stat(name)
 	if err != nil {
-		logger.Emit(logger.Log, name+" is not a correct path ")
-		return
+		log.Panicf( name,"%s is not a correct path ")
 	}
 
+	//cheking if file is a directory cause sending folders is not supported
 	if info.IsDir() {
-		logger.Emit(logger.Log, name+" is a directory ")
-		//TODO directory support
-	} else {
-		logger.Emit(logger.Log, "sending "+name)
-		sendfile(name, conn)
+		log.Panicf("%s is a directory ",name)
 	}
 
+	sendfile(name, conn)
 	conn.Close()
 }
 func sendfile(name string, conn net.Conn) {
+	defer conn.Close()
+
 	dim, err := strconv.Atoi(settings.SETTINGS["DIM_BUFFER"])
 	buffer := make([]byte, dim)
+
+	//open file to send
 	file, err := os.Open(name)
 	if err != nil {
-		fmt.Println(err)
-		return
+		log.Panicf("file %s could not be read",name)
 	}
+	defer file.Close()
 
 	// get filename
 	var _, filename = filepath.Split(name)
@@ -60,12 +58,12 @@ func sendfile(name string, conn net.Conn) {
 	conn.Write([]byte(filename))
 
 	//send file
+	log.Printf( "sending file %s",name)
 	for err != io.EOF {
 		var n_read int
 		n_read, err = file.Read(buffer)
 		conn.Write(buffer[:n_read])
 
 	}
-	file.Close()
 
 }
