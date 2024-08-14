@@ -7,12 +7,6 @@ on:
       - main
     tags:
       - "*"
-  push:
-    # run only against tags
-    branch:
-      - main
-    tags:
-      - "*"
 
 permissions:
   contents: write
