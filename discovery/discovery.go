@@ -8,10 +8,6 @@ import (
 	"time"
 )
 
-const DISCOVERY_SERVER_PORT= ":8828"
-const DISCOVERY_CLIENT_PORT= ":8829"
-const DISCOVERY_MAX_TRIES=5
-
 // structs for request and response
 type DiscoveryRequest struct{
 	Address string
@@ -21,16 +17,16 @@ type DiscoveryResponse struct{
 	Hostname string
 }
 
-func Send_discovery_request() [] DiscoveryResponse{
+func Send_discovery_request(clientPort string,serverPort string,broadcastAddr string,maxTries int) [] DiscoveryResponse{
 
 	var available_servers [] DiscoveryResponse
-	pc, err := net.ListenPacket("udp4",DISCOVERY_CLIENT_PORT)
+	pc, err := net.ListenPacket("udp4",clientPort)
 	if err != nil {
 		log.Panic("unable to create udp broadcast packet")
 	}
 	defer pc.Close()
 
-	addr,err := net.ResolveUDPAddr("udp4", "192.168.1.255"+ DISCOVERY_SERVER_PORT)
+	addr,err := net.ResolveUDPAddr("udp4", broadcastAddr + serverPort)
 	if err != nil {
 		log.Panicf("unable to create broadcast address, err %s",err)
 	}
@@ -51,7 +47,7 @@ func Send_discovery_request() [] DiscoveryResponse{
 	buf := make([]byte, 1024)
 	timeout:= time.Now().Local().Add(time.Second * time.Duration(5))
 	pc.SetReadDeadline(timeout)
-	for i := 0; i< DISCOVERY_MAX_TRIES; i++ {
+	for i := 0; i< maxTries; i++ {
 
 		n,_,err := pc.ReadFrom(buf)
 		if err == nil {
@@ -68,12 +64,12 @@ func Send_discovery_request() [] DiscoveryResponse{
 	return available_servers
 }
 
-func Listen_discovery_requests() {
-	pc,err := net.ListenPacket("udp4", DISCOVERY_SERVER_PORT)
+func Listen_discovery_requests(port string) {
+	pc,err := net.ListenPacket("udp4", port)
 	if err != nil {
 		log.Panic("unable to listen for discovery requests")
 	}
-	log.Printf("listening for discovery requests on port %s", DISCOVERY_SERVER_PORT)
+	log.Printf("listening for discovery requests on port %s", port)
 
 	for {
 		buf := make([]byte, 1024)

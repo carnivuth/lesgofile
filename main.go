@@ -8,9 +8,10 @@ import (
 	"lesgofile/settings"
 	"log"
 	"os"
+	"strconv"
 )
 
-const PARAMETERS = "PARAMETERS \nfunctionmode = [send|serve] \nSEND PARAMETERS \nserveraddress filename"
+const PARAMETERS = "PARAMETERS \nfunctionmode = [send|serve|discover] \nSEND PARAMETERS \nserveraddress filename"
 
 func main() {
 	settings.LoadSettings()
@@ -31,11 +32,15 @@ func main() {
 		}
 		case "serve":
 		// launch discovery agent
-		go discovery.Listen_discovery_requests()
+		go discovery.Listen_discovery_requests(settings.SETTINGS["DISCOVERY_SERVER_PORT"])
 		//launch server
 		network.Reciver(settings.SETTINGS["PORT"])
 	case "discover":
-		var available_servers = discovery.Send_discovery_request()
+		maxTries,err:= strconv.Atoi(settings.SETTINGS["DISCOVERY_MAX_TRIES"])
+		if err != nil{
+		log.Panicf("unable to convert discovery parameter")
+	}
+		var available_servers = discovery.Send_discovery_request(settings.SETTINGS["DISCOVERY_CLIENT_PORT"],settings.SETTINGS["DISCOVERY_SERVER_PORT"],settings.SETTINGS["BROADCAST_ADDRESS"],maxTries)
 		for _,discoveryResponse := range available_servers{
 
 			fmt.Printf("name: %s\n",discoveryResponse.Hostname )
