@@ -15,7 +15,11 @@ lesgofile send  <file> <dest> // dest optional, if not provided, start discover 
 ## DISCOVERY
 server will listen on udp port and reply with name:address to clients
 clients will send broadcast discovery requests on the local network and get replies from servers
+- get broadcast address automatically
 
 ## TESTING
 Use docker and docker compose to test network functionality
 Develop dockerfile
+
+## CONFIGURATION
+CLI option to dump json configuration
