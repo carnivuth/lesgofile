@@ -1,8 +1,8 @@
 # LESGOFILE
- 
-Simple project to transfer file over network 
 
-The goal of the project is to have a simple daemon application to experiment deployment and distribution techniques
+Simple project to transfer file over network
+
+The goal of the project is to have a simple daemon application to experiment deployment and distribution techniques and some go programming
 
 ## INSTALLATION:
 
@@ -14,13 +14,12 @@ downlad latest release from the relase page
 
 - clone repo
 
-- run `sudo make install`
+- run `go build`
 
-you can set `DESTDIR` and `prefix` variables in make to customize the installation directory
 
 ## USAGE
 
-the main binary file can act as server and client, 
+the main binary file can act as server and client,
 
 to run client:
 
@@ -31,16 +30,16 @@ lesgofile send <address> filename
 you can also pipe the file name to the lesgofile client:
 
 ```bash
-echo "filename" | lesgofile send <address> 
+echo "filename" | lesgofile send <address>
 ```
 
 to run server:
 
 ```bash
-lesgofile recive
+lesgofile serve
 ```
-or with systemd 
+to search for servers in lan:
 
-```
-systemctl start lesgofile
+```bash
+lesgofile discover
 ```

@@ -91,9 +91,9 @@ nfpms:
         dst: /usr/lib/systemd/system/
 
       # Simple config file
-      - src: etc/lesgofile.json
-        dst: /etc/lesgofile/lesgofile.json
-        type: config
+      #- src: etc/lesgofile.json
+      #  dst: /etc/lesgofile/lesgofile.json
+      #  type: config
 
 
     # Scripts to execute during the installation of the package. (overridable)
@@ -104,7 +104,6 @@ nfpms:
     # Templates: allowed.
     scripts:
       preinstall: "scripts/preinstall.sh"
-      postinstall: "scripts/postinstall.sh"
       preremove: "scripts/preremove.sh"
       postremove: "scripts/postremove.sh"
     #
