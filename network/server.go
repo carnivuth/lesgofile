@@ -17,6 +17,7 @@ func Reciver(port string) {
 	if err != nil {
 		log.Panicf("unable to listen over port: %s", port)
 	}
+	defer ln.Close()
 	log.Printf( "start listen on port: %s", port)
 	for {
 		conn, err := ln.Accept()
