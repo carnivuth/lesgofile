@@ -1,8 +1,13 @@
 # LESGOFILE
 
-Simple project to transfer file over network
+Just a simple project to transfer file over network, the scope is to practice with deployment techniques, docker, go low level networking applications and system,
 
-The goal of the project is to have a simple daemon application to experiment deployment and distribution techniques and some go programming
+## FEATURES
+
+- server and client included in a single binary
+- discovery features
+- multiple deployment strategies as packages for all modern distros and docker
+- configuration from file
 
 ## INSTALLATION:
 
