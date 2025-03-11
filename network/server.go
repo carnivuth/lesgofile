@@ -8,8 +8,6 @@ import (
 	"log"
 )
 
-//wait for client and download file
-
 func Reciver(port string,buffer_dimension int,destination_folder string) {
 	ln, err := net.Listen("tcp", ":"+port)
 	if err != nil {
@@ -38,25 +36,26 @@ func saveFile(conn net.Conn,buffer_dimension int,destination_folder string) {
 
 	binary.Read(conn, binary.BigEndian, &size)
 
-	//read filename
+	// read filename
   n_read, err := conn.Read(filename[:size])
 	if err != nil {
 		log.Print("could not read filename" )
 	}
 	log.Printf("recived "+string(filename[:n_read])+" filename\n")
 
-	//create file
+	// create file
 	file, err := os.Create(destination_folder + string(filename[:n_read]))
 	if err != nil {
 		log.Printf("could not open %s for writing",destination_folder + string(filename[:n_read]))
 	}
 	defer file.Close()
 
-	//write file
+	// write file
 	for err != io.EOF {
 		n_read, err = conn.Read(buffer)
-		if err != nil {
+		if err != nil && err != io.EOF{
 			log.Printf("error in reading from %s",conn.RemoteAddr())
+			log.Printf(err.Error())
 		}
 		file.Write(buffer[:n_read])
 	}
