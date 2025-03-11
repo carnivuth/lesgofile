@@ -26,8 +26,8 @@ jobs:
           distribution: goreleaser
           version: "~> v2"
           args: release --clean
-        #env:
-        #  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
   build_and_push_docker_container:
     runs-on: ubuntu-latest
