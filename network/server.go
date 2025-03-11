@@ -5,14 +5,12 @@ import (
 	"io"
 	"net"
 	"os"
-	"strconv"
 	"log"
-	"lesgofile/settings"
 )
 
 //wait for client and download file
 
-func Reciver(port string) {
+func Reciver(port string,buffer_dimension int,destination_folder string) {
 	ln, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		log.Panicf("unable to listen over port: %s", port)
@@ -25,36 +23,32 @@ func Reciver(port string) {
 			log.Print("unable to accept request from client")
 		} else {
 			log.Printf( "connected to client %s", conn.RemoteAddr())
-			go saveFile(conn)
+			go saveFile(conn,buffer_dimension,destination_folder)
 		}
 	}
 }
 
-func saveFile(conn net.Conn) {
+func saveFile(conn net.Conn,buffer_dimension int,destination_folder string) {
 	defer conn.Close()
 
 	var size int64
 	var n_read int
-	dim, err := strconv.Atoi(settings.SETTINGS["DIM_BUFFER"])
-	if err != nil {
-		log.Panic("could not load buffer dimension" )
-	}
-	buffer := make([]byte, dim)
-	filename := make([]byte, dim)
+	buffer := make([]byte, buffer_dimension)
+	filename := make([]byte, buffer_dimension)
 
 	binary.Read(conn, binary.BigEndian, &size)
 
 	//read filename
-	n_read, err = conn.Read(filename[:size])
+  n_read, err := conn.Read(filename[:size])
 	if err != nil {
-		log.Panic("could not read filename" )
+		log.Print("could not read filename" )
 	}
-	log.Print( "recived "+string(filename[:n_read])+" filename\n")
+	log.Printf("recived "+string(filename[:n_read])+" filename\n")
 
 	//create file
-	file, err := os.Create(settings.SETTINGS["DESTINATION_FOLDER"] + string(filename[:n_read]))
+	file, err := os.Create(destination_folder + string(filename[:n_read]))
 	if err != nil {
-		log.Panicf("could not open %s for writing",settings.SETTINGS["DESTINATION_FOLDER"] + string(filename[:n_read]))
+		log.Printf("could not open %s for writing",destination_folder + string(filename[:n_read]))
 	}
 	defer file.Close()
 
@@ -62,11 +56,11 @@ func saveFile(conn net.Conn) {
 	for err != io.EOF {
 		n_read, err = conn.Read(buffer)
 		if err != nil {
-			log.Panicf("error in reading from %s",conn.RemoteAddr())
+			log.Printf("error in reading from %s",conn.RemoteAddr())
 		}
 		file.Write(buffer[:n_read])
 	}
 
-	log.Print("connection terminated")
+	log.Printf("connection terminated")
 
 }

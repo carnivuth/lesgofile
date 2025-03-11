@@ -7,12 +7,10 @@ import (
 	"os"
 	"log"
 	"path/filepath"
-	"strconv"
-	"lesgofile/settings"
 )
 
 // connect to server and upload file
-func Sender(address string, port string, name string) {
+func Sender(address string, port string, name string,buffer_dimension int) {
 
 	//connect to server
 	conn, err := net.Dial("tcp", address+":"+port)
@@ -24,7 +22,7 @@ func Sender(address string, port string, name string) {
 	//open file
 	info, err := os.Stat(name)
 	if err != nil {
-		log.Panicf( name,"%s is not a correct path ")
+		log.Panicf( name,"%s is not a correct path")
 	}
 
 	//cheking if file is a directory cause sending folders is not supported
@@ -32,14 +30,13 @@ func Sender(address string, port string, name string) {
 		log.Panicf("%s is a directory ",name)
 	}
 
-	sendfile(name, conn)
+	sendfile(name, conn,buffer_dimension)
 	conn.Close()
 }
-func sendfile(name string, conn net.Conn) {
+func sendfile(name string, conn net.Conn,buffer_dimension int) {
 	defer conn.Close()
 
-	dim, err := strconv.Atoi(settings.SETTINGS["DIM_BUFFER"])
-	buffer := make([]byte, dim)
+	buffer := make([]byte, buffer_dimension)
 
 	//open file to send
 	file, err := os.Open(name)

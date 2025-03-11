@@ -8,39 +8,64 @@ import (
 	"lesgofile/settings"
 	"log"
 	"os"
-	"strconv"
 )
 
 const PARAMETERS = "PARAMETERS \nfunctionmode = [send|serve|discover] \nSEND PARAMETERS \nserveraddress filename"
 
 func main() {
-	settings.LoadSettings()
 	var args = os.Args[1:]
 	if len(args) < 1 {
 		log.Fatal( "too fiew arguments ",PARAMETERS)
 	}
 	switch args[0] {
+
+  case "dump-config":
+
+    jsonEncodedSettings,err := settings.DumpSettings()
+    if err == nil{
+      log.Println(jsonEncodedSettings)
+    }else{
+      log.Panic("unable to marshal default settings")
+    }
+
+
 	case "send":
+
+	  var settings = settings.LoadSettings()
+
 		if len(args) == 3 {
-			network.Sender(args[1], settings.SETTINGS["PORT"], args[2])
+
+			network.Sender(args[1], settings.File_server_port, args[2],settings.Buffer_dimension)
+
+		// if filename is not pass as argument read file from stdin
 		} else if len(args) < 3 {
-			//filter behavior
+
 			scanner := bufio.NewScanner(os.Stdin)
 			for scanner.Scan() {
-				network.Sender(args[1], settings.SETTINGS["PORT"], scanner.Text())
+				network.Sender(args[1], settings.File_server_port, scanner.Text(),settings.Buffer_dimension)
 			}
 		}
+
 		case "serve":
+
+	  var settings = settings.LoadSettings()
+
 		// launch discovery agent
-		go discovery.Listen_discovery_requests(settings.SETTINGS["DISCOVERY_SERVER_PORT"])
+		go discovery.Listen_discovery_requests(settings.Discovery_server_port)
+
 		//launch server
-		network.Reciver(settings.SETTINGS["PORT"])
+		network.Reciver(settings.File_server_port,settings.Buffer_dimension,settings.Destination_folder)
+
 	case "discover":
-		maxTries,err:= strconv.Atoi(settings.SETTINGS["DISCOVERY_MAX_TRIES"])
-		if err != nil{
-		log.Panicf("unable to convert discovery parameter")
-	}
-		var available_servers = discovery.Send_discovery_request(settings.SETTINGS["DISCOVERY_CLIENT_PORT"],settings.SETTINGS["DISCOVERY_SERVER_PORT"],settings.SETTINGS["BROADCAST_ADDRESS"],maxTries)
+
+	  var settings = settings.LoadSettings()
+
+		var available_servers = discovery.Send_discovery_request(
+      settings.Discovery_client_port,
+      settings.Discovery_server_port,
+      settings.Broadcast_address,
+      settings.Discovery_max_tries)
+
 		for _,discoveryResponse := range available_servers{
 
 			fmt.Printf("name: %s\n",discoveryResponse.Hostname )
