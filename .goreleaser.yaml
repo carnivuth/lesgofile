@@ -85,10 +85,8 @@ nfpms:
 
     # Contents to add to the package.
     # GoReleaser will automatically add the binaries.
-    contents:
+    #contents:
       # Basic file that applies to all packagers
-      - src: systemd/lesgofile.service
-        dst: /usr/lib/systemd/system/
 
       # Simple config file
       #- src: etc/lesgofile.json
@@ -102,8 +100,8 @@ nfpms:
     # Values are the paths to the scripts which will be executed.
     #
     # Templates: allowed.
-    scripts:
-      preinstall: "scripts/preinstall.sh"
-      preremove: "scripts/preremove.sh"
-      postremove: "scripts/postremove.sh"
+    #scripts:
+    #  preinstall:
+    #  preremove:
+    #  postremove:
     #
