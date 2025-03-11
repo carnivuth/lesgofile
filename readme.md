@@ -88,6 +88,17 @@ It will print a list of discovered servers and the IP address.
 
 Lesgofile functionalities can be tested with docker simulating a client server scenario where a client sends a file to the server and then terminates and another client sends discovery requests
 
+```mermaid
+flowchart LR
+A[(server)]
+B[file client]
+C[discovery client]
+C -- send discovery requests-->A
+B -- send dummy file-->A
+```
+
+Here a docker compose sample to simulate the testing architecture
+
 ```yaml
 ---
 services:
