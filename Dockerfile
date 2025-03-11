@@ -1,8 +1,5 @@
 FROM golang:1.22-alpine
 
-# coping default config
-COPY etc/lesgofile.json /etc/lesgofile/lesgofile.json
-
 COPY . /go/src/lesgofile
 WORKDIR /go/src/lesgofile
 
@@ -13,4 +10,5 @@ RUN go mod tidy
 RUN go build -o /lesgofile
 EXPOSE 50000
 
+# run the server component
 CMD ["/lesgofile", "serve"]
