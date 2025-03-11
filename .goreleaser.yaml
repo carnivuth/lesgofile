@@ -82,26 +82,3 @@ nfpms:
 
     # Priority.
     priority: extra
-
-    # Contents to add to the package.
-    # GoReleaser will automatically add the binaries.
-    #contents:
-      # Basic file that applies to all packagers
-
-      # Simple config file
-      #- src: etc/lesgofile.json
-      #  dst: /etc/lesgofile/lesgofile.json
-      #  type: config
-
-
-    # Scripts to execute during the installation of the package. (overridable)
-    #
-    # Keys are the possible targets during the installation process
-    # Values are the paths to the scripts which will be executed.
-    #
-    # Templates: allowed.
-    #scripts:
-    #  preinstall:
-    #  preremove:
-    #  postremove:
-    #
