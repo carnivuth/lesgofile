@@ -81,3 +81,51 @@ lesgofile discover
 ```
 
 It will print a list of discovered servers and the IP address.
+
+## Developer documentation
+
+### Testing with docker
+
+Lesgofile functionalities can be tested with docker simulating a client server scenario where a client sends a file to the server and then terminates and another client sends discovery requests
+
+```yaml
+---
+services:
+
+  # test discovery functionality
+  lesgofile-discovery-user:
+    build:
+      dockerfile: ./Dockerfile
+    command: /lesgofile discover
+    depends_on:
+      lesgofile-server:
+        condition: service_started
+        restart: true
+    develop:
+      watch:
+        - path: .
+          action: rebuild
+
+  # test sending files functionality
+  lesgofile-client:
+    build:
+      dockerfile: ./Dockerfile
+    command: /lesgofile send lesgofile-server /lesgofile
+    depends_on:
+      lesgofile-server:
+        condition: service_started
+        restart: true
+    develop:
+      watch:
+        - path: .
+          action: rebuild
+
+  # test main server
+  lesgofile-server:
+    build:
+      dockerfile: ./Dockerfile
+    develop:
+      watch:
+        - path: .
+          action: rebuild
+```
