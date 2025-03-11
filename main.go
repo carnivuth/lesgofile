@@ -23,7 +23,7 @@ func main() {
 
     jsonEncodedSettings,err := settings.DumpSettings()
     if err == nil{
-      log.Println(jsonEncodedSettings)
+      fmt.Println(string(jsonEncodedSettings))
     }else{
       log.Panic("unable to marshal default settings")
     }
