@@ -12,6 +12,7 @@ import (
 type DiscoveryRequest struct{
 	Address string
 }
+
 type DiscoveryResponse struct{
 	Address string
 	Hostname string

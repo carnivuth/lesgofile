@@ -29,7 +29,7 @@ func defaultSettings() settings {
     Discovery_server_port: ":8828",
     Discovery_client_port : ":8829",
     Discovery_max_tries: 5,
-    Broadcast_address: "192.168.1.255",
+    Broadcast_address: "255.255.255.255",
   }
 
   return settings
