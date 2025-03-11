@@ -1,50 +1,83 @@
-# LESGOFILE
+# Lesgofile 🗃️
 
-Just a simple project to transfer file over network, the scope is to practice with deployment techniques, docker, go low level networking applications and system,
+Just a simple project to transfer file over network,
 
-## FEATURES
+## Why this
 
-- server and client included in a single binary
-- discovery features
-- multiple deployment strategies as packages for all modern distros and docker
-- configuration from file
+I created this project with the scope of practice with some low level network programming and deployment automation techniques.
+The project is distributed in multiple format as a single compiled binary using [goreleaser](https://goreleaser.com/)
 
-## INSTALLATION:
+## Features
 
-downlad latest release from the relase page
+- transfer file between clients (*obviously*)
+- discovery features, server expose a UDP endpoint that can be contacted from the clients to discover available servers
+- multiple deployment options supported thanks to goreleaser (*all modern distros and docker container*)
+- client and server can be configured with a JSON file
 
-### FROM SOURCE
+## Installation:
 
-- install the make dependencies `go`
+Installation can be performed in 3 ways
 
-- clone repo
+### Compiled binaries
 
-- run `go build`
+Download latest release from the [release page](https://github.com/carnivuth/lesgofile/releases/latest)
 
+### As docker container
 
-## USAGE
+Lesgofile can be executed as a docker container, the default `CMD` runs the server component here an example of `docker-compose` file
 
-the main binary file can act as server and client,
-
-to run client:
-
-```bash
-lesgofile send <address> filename
+```yaml
+---
+services:
+  lesgofile:
+    image: carnivuth/lesgofile:latest
 ```
 
-you can also pipe the file name to the lesgofile client:
+To run the client side as a docker component pull the image and run the command inside it
+
+
+### From source
+
+- install the [go compiler](https://go.dev/doc/install)
+
+- clone sources
+
+```bash
+git clone https://github.com/carnivuth/lesgofile
+```
+
+- build sources
+
+```bash
+cd lesgofile && go build
+```
+
+## Usage
+
+The main binary file can act as server and client,
+
+To run server:
+
+```bash
+lesgofile serve
+```
+
+To run client:
+
+```bash
+lesgofile send <server_address> filename
+```
+
+You can also pipe the file name to the lesgofile client:
 
 ```bash
 echo "filename" | lesgofile send <address>
 ```
 
-to run server:
-
-```bash
-lesgofile serve
-```
-to search for servers in lan:
+To search for servers in LAN using discovery feature:
 
 ```bash
 lesgofile discover
 ```
+
+It will print a list of discovered servers and the IP address.
