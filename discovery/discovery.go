@@ -21,13 +21,13 @@ type DiscoveryResponse struct{
 func Send_discovery_request(clientPort string,serverPort string,broadcastAddr string,maxTries int) [] DiscoveryResponse{
 
 	var available_servers [] DiscoveryResponse
-	pc, err := net.ListenPacket("udp4",clientPort)
+  pc, err := net.ListenPacket("udp4",":" + clientPort)
 	if err != nil {
 		log.Panic("unable to create udp broadcast packet")
 	}
 	defer pc.Close()
 
-	addr,err := net.ResolveUDPAddr("udp4", broadcastAddr + serverPort)
+  addr,err := net.ResolveUDPAddr("udp4", broadcastAddr + ":" + serverPort)
 	if err != nil {
 		log.Panicf("unable to create broadcast address, err %s",err)
 	}
@@ -66,7 +66,7 @@ func Send_discovery_request(clientPort string,serverPort string,broadcastAddr st
 }
 
 func Listen_discovery_requests(port string) {
-	pc,err := net.ListenPacket("udp4", port)
+  pc,err := net.ListenPacket("udp4", ":" + port)
 	if err != nil {
 		log.Panic("unable to listen for discovery requests")
 	}

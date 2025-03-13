@@ -26,8 +26,8 @@ func defaultSettings() settings {
     File_server_port : "50000",
     Buffer_dimension : 1024,
     Destination_folder: "." + string(os.PathSeparator),
-    Discovery_server_port: ":8828",
-    Discovery_client_port : ":8829",
+    Discovery_server_port: "8828",
+    Discovery_client_port : "8829",
     Discovery_max_tries: 5,
     Broadcast_address: "255.255.255.255",
   }
