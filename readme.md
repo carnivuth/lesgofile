@@ -84,6 +84,51 @@ It will print a list of discovered servers and the IP address.
 
 ## Developer documentation
 
+### File server functionality
+
+The file sending functionality is designed as a standard client server architecture with a multiple thread server that spawns one working process for clients, this process are implemented using go routines
+
+```mermaid
+sequenceDiagram
+participant server
+participant client_handler
+participant client
+server ->> server: start listening for requests
+client ->> server: connects
+server ->> client_handler: spawns go routine
+activate client_handler
+client ->> client_handler: sends filename and filesize
+loop until all file is sent
+client ->> client_handler: sends filecontent based on buffersize
+end
+deactivate client_handler
+```
+
+### Discovery functionality
+
+The discovery functionality is implemented using a UDP endpoint where server nodes listen for requests and sends a JSON encoded response to the client, the clients make broadcast requests to discover servers in the LAN
+
+```mermaid
+sequenceDiagram
+participant client
+participant server1
+participant server2
+
+server1 ->> server1: start listening for discovery requests
+server2 ->> server2: start listening for discovery requests
+
+loop discovery_max_tries
+    par client to server1
+        client ->> server1: send broadcast message with discovery request
+        server1 ->> client: send unicast discovery response
+    and client to server2
+        client ->> server2: send broadcast message with discovery request
+        server2 ->> client: send unicast discovery response
+    end
+end
+```
+
+
 ### Testing with docker
 
 Lesgofile functionalities can be tested with docker simulating a client server scenario where a client sends a file to the server and then terminates and another client sends discovery requests
