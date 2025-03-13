@@ -2,6 +2,8 @@
 
 Just a simple project to transfer file over network,
 
+![](demo.gif)
+
 ## Why this
 
 I created this project with the scope of practice with some low level network programming and deployment automation techniques.
@@ -86,7 +88,7 @@ It will print a list of discovered servers and the IP address.
 
 ### File server functionality
 
-The file sending functionality is designed as a standard client server architecture with a multiple thread server that spawns one working process for clients, this process are implemented using go routines
+The file sending functionality is designed as a standard client server architecture with a multiple thread server that spawns one working process for client, the child process is implemented using go routines
 
 ```mermaid
 sequenceDiagram
